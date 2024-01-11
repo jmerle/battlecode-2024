@@ -220,36 +220,36 @@ public class BFSNav extends Globals {
         int distance68 = 1_000_000;
         Direction direction68 = null;
 
-        if (rc.canMove(Direction.WEST) && !visited.contains(location1)) {
-            distance1 = 1;
+        if ((rc.canMove(Direction.WEST) || rc.canFill(location1)) && !visited.contains(location1)) {
+            distance1 = rc.canFill(location1) && rc.isMovementReady() ? 2 : 1;
             direction1 = Direction.WEST;
         }
-        if (rc.canMove(Direction.EAST) && !visited.contains(location2)) {
-            distance2 = 1;
+        if ((rc.canMove(Direction.EAST) || rc.canFill(location2)) && !visited.contains(location2)) {
+            distance2 = rc.canFill(location2) && rc.isMovementReady() ? 2 : 1;
             direction2 = Direction.EAST;
         }
-        if (rc.canMove(Direction.SOUTH) && !visited.contains(location3)) {
-            distance3 = 1;
+        if ((rc.canMove(Direction.SOUTH) || rc.canFill(location3)) && !visited.contains(location3)) {
+            distance3 = rc.canFill(location3) && rc.isMovementReady() ? 2 : 1;
             direction3 = Direction.SOUTH;
         }
-        if (rc.canMove(Direction.NORTH) && !visited.contains(location4)) {
-            distance4 = 1;
+        if ((rc.canMove(Direction.NORTH) || rc.canFill(location4)) && !visited.contains(location4)) {
+            distance4 = rc.canFill(location4) && rc.isMovementReady() ? 2 : 1;
             direction4 = Direction.NORTH;
         }
-        if (rc.canMove(Direction.SOUTHWEST) && !visited.contains(location5)) {
-            distance5 = 1;
+        if ((rc.canMove(Direction.SOUTHWEST) || rc.canFill(location5)) && !visited.contains(location5)) {
+            distance5 = rc.canFill(location5) && rc.isMovementReady() ? 2 : 1;
             direction5 = Direction.SOUTHWEST;
         }
-        if (rc.canMove(Direction.NORTHWEST) && !visited.contains(location6)) {
-            distance6 = 1;
+        if ((rc.canMove(Direction.NORTHWEST) || rc.canFill(location6)) && !visited.contains(location6)) {
+            distance6 = rc.canFill(location6) && rc.isMovementReady() ? 2 : 1;
             direction6 = Direction.NORTHWEST;
         }
-        if (rc.canMove(Direction.SOUTHEAST) && !visited.contains(location7)) {
-            distance7 = 1;
+        if ((rc.canMove(Direction.SOUTHEAST) || rc.canFill(location7)) && !visited.contains(location7)) {
+            distance7 = rc.canFill(location7) && rc.isMovementReady() ? 2 : 1;
             direction7 = Direction.SOUTHEAST;
         }
-        if (rc.canMove(Direction.NORTHEAST) && !visited.contains(location8)) {
-            distance8 = 1;
+        if ((rc.canMove(Direction.NORTHEAST) || rc.canFill(location8)) && !visited.contains(location8)) {
+            distance8 = rc.canFill(location8) && rc.isMovementReady() ? 2 : 1;
             direction8 = Direction.NORTHEAST;
         }
         switch (myX) {
@@ -257,7 +257,7 @@ public class BFSNav extends Globals {
             case 1:
                 break;
             default:
-                if (rc.sensePassability(location9)) {
+                if (rc.sensePassability(location9) || (!rc.hasFlag() && rc.senseMapInfo(location9).isWater())) {
                     if (distance1 + 1 < distance9) {
                         distance9 = distance1 + 1;
                         direction9 = direction1;
@@ -278,7 +278,7 @@ public class BFSNav extends Globals {
             case 2:
                 break;
             default:
-                if (rc.sensePassability(location12)) {
+                if (rc.sensePassability(location12) || (!rc.hasFlag() && rc.senseMapInfo(location12).isWater())) {
                     if (distance2 + 1 < distance12) {
                         distance12 = distance2 + 1;
                         direction12 = direction2;
@@ -298,7 +298,7 @@ public class BFSNav extends Globals {
             case 1:
                 break;
             default:
-                if (rc.sensePassability(location15)) {
+                if (rc.sensePassability(location15) || (!rc.hasFlag() && rc.senseMapInfo(location15).isWater())) {
                     if (distance3 + 1 < distance15) {
                         distance15 = distance3 + 1;
                         direction15 = direction3;
@@ -319,7 +319,7 @@ public class BFSNav extends Globals {
             case 2:
                 break;
             default:
-                if (rc.sensePassability(location18)) {
+                if (rc.sensePassability(location18) || (!rc.hasFlag() && rc.senseMapInfo(location18).isWater())) {
                     if (distance4 + 1 < distance18) {
                         distance18 = distance4 + 1;
                         direction18 = direction4;
@@ -343,7 +343,7 @@ public class BFSNav extends Globals {
                     case 0:
                         break;
                     default:
-                        if (rc.sensePassability(location10)) {
+                        if (rc.sensePassability(location10) || (!rc.hasFlag() && rc.senseMapInfo(location10).isWater())) {
                             if (distance5 + 1 < distance10) {
                                 distance10 = distance5 + 1;
                                 direction10 = direction5;
@@ -369,7 +369,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location11)) {
+                        if (rc.sensePassability(location11) || (!rc.hasFlag() && rc.senseMapInfo(location11).isWater())) {
                             if (distance6 + 1 < distance11) {
                                 distance11 = distance6 + 1;
                                 direction11 = direction6;
@@ -395,7 +395,7 @@ public class BFSNav extends Globals {
                     case 0:
                         break;
                     default:
-                        if (rc.sensePassability(location13)) {
+                        if (rc.sensePassability(location13) || (!rc.hasFlag() && rc.senseMapInfo(location13).isWater())) {
                             if (distance7 + 1 < distance13) {
                                 distance13 = distance7 + 1;
                                 direction13 = direction7;
@@ -422,7 +422,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location14)) {
+                        if (rc.sensePassability(location14) || (!rc.hasFlag() && rc.senseMapInfo(location14).isWater())) {
                             if (distance8 + 1 < distance14) {
                                 distance14 = distance8 + 1;
                                 direction14 = direction8;
@@ -447,7 +447,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location16)) {
+                        if (rc.sensePassability(location16) || (!rc.hasFlag() && rc.senseMapInfo(location16).isWater())) {
                             if (distance15 + 1 < distance16) {
                                 distance16 = distance15 + 1;
                                 direction16 = direction15;
@@ -473,7 +473,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location17)) {
+                        if (rc.sensePassability(location17) || (!rc.hasFlag() && rc.senseMapInfo(location17).isWater())) {
                             if (distance15 + 1 < distance17) {
                                 distance17 = distance15 + 1;
                                 direction17 = direction15;
@@ -499,7 +499,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location19)) {
+                        if (rc.sensePassability(location19) || (!rc.hasFlag() && rc.senseMapInfo(location19).isWater())) {
                             if (distance18 + 1 < distance19) {
                                 distance19 = distance18 + 1;
                                 direction19 = direction18;
@@ -526,7 +526,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location20)) {
+                        if (rc.sensePassability(location20) || (!rc.hasFlag() && rc.senseMapInfo(location20).isWater())) {
                             if (distance18 + 1 < distance20) {
                                 distance20 = distance18 + 1;
                                 direction20 = direction18;
@@ -552,7 +552,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location21)) {
+                        if (rc.sensePassability(location21) || (!rc.hasFlag() && rc.senseMapInfo(location21).isWater())) {
                             if (distance16 + 1 < distance21) {
                                 distance21 = distance16 + 1;
                                 direction21 = direction16;
@@ -579,7 +579,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location22)) {
+                        if (rc.sensePassability(location22) || (!rc.hasFlag() && rc.senseMapInfo(location22).isWater())) {
                             if (distance19 + 1 < distance22) {
                                 distance22 = distance19 + 1;
                                 direction22 = direction19;
@@ -606,7 +606,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location23)) {
+                        if (rc.sensePassability(location23) || (!rc.hasFlag() && rc.senseMapInfo(location23).isWater())) {
                             if (distance17 + 1 < distance23) {
                                 distance23 = distance17 + 1;
                                 direction23 = direction17;
@@ -634,7 +634,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location24)) {
+                        if (rc.sensePassability(location24) || (!rc.hasFlag() && rc.senseMapInfo(location24).isWater())) {
                             if (distance20 + 1 < distance24) {
                                 distance24 = distance20 + 1;
                                 direction24 = direction20;
@@ -656,7 +656,7 @@ public class BFSNav extends Globals {
             case 2:
                 break;
             default:
-                if (rc.sensePassability(location25)) {
+                if (rc.sensePassability(location25) || (!rc.hasFlag() && rc.senseMapInfo(location25).isWater())) {
                     if (distance9 + 1 < distance25) {
                         distance25 = distance9 + 1;
                         direction25 = direction9;
@@ -678,7 +678,7 @@ public class BFSNav extends Globals {
             case 3:
                 break;
             default:
-                if (rc.sensePassability(location30)) {
+                if (rc.sensePassability(location30) || (!rc.hasFlag() && rc.senseMapInfo(location30).isWater())) {
                     if (distance12 + 1 < distance30) {
                         distance30 = distance12 + 1;
                         direction30 = direction12;
@@ -699,7 +699,7 @@ public class BFSNav extends Globals {
             case 2:
                 break;
             default:
-                if (rc.sensePassability(location35)) {
+                if (rc.sensePassability(location35) || (!rc.hasFlag() && rc.senseMapInfo(location35).isWater())) {
                     if (distance15 + 1 < distance35) {
                         distance35 = distance15 + 1;
                         direction35 = direction15;
@@ -721,7 +721,7 @@ public class BFSNav extends Globals {
             case 3:
                 break;
             default:
-                if (rc.sensePassability(location40)) {
+                if (rc.sensePassability(location40) || (!rc.hasFlag() && rc.senseMapInfo(location40).isWater())) {
                     if (distance18 + 1 < distance40) {
                         distance40 = distance18 + 1;
                         direction40 = direction18;
@@ -746,7 +746,7 @@ public class BFSNav extends Globals {
                     case 0:
                         break;
                     default:
-                        if (rc.sensePassability(location26)) {
+                        if (rc.sensePassability(location26) || (!rc.hasFlag() && rc.senseMapInfo(location26).isWater())) {
                             if (distance10 + 1 < distance26) {
                                 distance26 = distance10 + 1;
                                 direction26 = direction10;
@@ -777,7 +777,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location27)) {
+                        if (rc.sensePassability(location27) || (!rc.hasFlag() && rc.senseMapInfo(location27).isWater())) {
                             if (distance11 + 1 < distance27) {
                                 distance27 = distance11 + 1;
                                 direction27 = direction11;
@@ -808,7 +808,7 @@ public class BFSNav extends Globals {
                     case 0:
                         break;
                     default:
-                        if (rc.sensePassability(location31)) {
+                        if (rc.sensePassability(location31) || (!rc.hasFlag() && rc.senseMapInfo(location31).isWater())) {
                             if (distance13 + 1 < distance31) {
                                 distance31 = distance13 + 1;
                                 direction31 = direction13;
@@ -840,7 +840,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location32)) {
+                        if (rc.sensePassability(location32) || (!rc.hasFlag() && rc.senseMapInfo(location32).isWater())) {
                             if (distance14 + 1 < distance32) {
                                 distance32 = distance14 + 1;
                                 direction32 = direction14;
@@ -870,7 +870,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location36)) {
+                        if (rc.sensePassability(location36) || (!rc.hasFlag() && rc.senseMapInfo(location36).isWater())) {
                             if (distance35 + 1 < distance36) {
                                 distance36 = distance35 + 1;
                                 direction36 = direction35;
@@ -901,7 +901,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location37)) {
+                        if (rc.sensePassability(location37) || (!rc.hasFlag() && rc.senseMapInfo(location37).isWater())) {
                             if (distance35 + 1 < distance37) {
                                 distance37 = distance35 + 1;
                                 direction37 = direction35;
@@ -932,7 +932,7 @@ public class BFSNav extends Globals {
                     case 3:
                         break;
                     default:
-                        if (rc.sensePassability(location41)) {
+                        if (rc.sensePassability(location41) || (!rc.hasFlag() && rc.senseMapInfo(location41).isWater())) {
                             if (distance40 + 1 < distance41) {
                                 distance41 = distance40 + 1;
                                 direction41 = direction40;
@@ -964,7 +964,7 @@ public class BFSNav extends Globals {
                     case 3:
                         break;
                     default:
-                        if (rc.sensePassability(location42)) {
+                        if (rc.sensePassability(location42) || (!rc.hasFlag() && rc.senseMapInfo(location42).isWater())) {
                             if (distance40 + 1 < distance42) {
                                 distance42 = distance40 + 1;
                                 direction42 = direction40;
@@ -995,7 +995,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location28)) {
+                        if (rc.sensePassability(location28) || (!rc.hasFlag() && rc.senseMapInfo(location28).isWater())) {
                             if (distance21 + 1 < distance28) {
                                 distance28 = distance21 + 1;
                                 direction28 = direction21;
@@ -1023,7 +1023,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location29)) {
+                        if (rc.sensePassability(location29) || (!rc.hasFlag() && rc.senseMapInfo(location29).isWater())) {
                             if (distance22 + 1 < distance29) {
                                 distance29 = distance22 + 1;
                                 direction29 = direction22;
@@ -1051,7 +1051,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location33)) {
+                        if (rc.sensePassability(location33) || (!rc.hasFlag() && rc.senseMapInfo(location33).isWater())) {
                             if (distance23 + 1 < distance33) {
                                 distance33 = distance23 + 1;
                                 direction33 = direction23;
@@ -1080,7 +1080,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location34)) {
+                        if (rc.sensePassability(location34) || (!rc.hasFlag() && rc.senseMapInfo(location34).isWater())) {
                             if (distance24 + 1 < distance34) {
                                 distance34 = distance24 + 1;
                                 direction34 = direction24;
@@ -1107,7 +1107,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location38)) {
+                        if (rc.sensePassability(location38) || (!rc.hasFlag() && rc.senseMapInfo(location38).isWater())) {
                             if (distance36 + 1 < distance38) {
                                 distance38 = distance36 + 1;
                                 direction38 = direction36;
@@ -1135,7 +1135,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location39)) {
+                        if (rc.sensePassability(location39) || (!rc.hasFlag() && rc.senseMapInfo(location39).isWater())) {
                             if (distance37 + 1 < distance39) {
                                 distance39 = distance37 + 1;
                                 direction39 = direction37;
@@ -1163,7 +1163,7 @@ public class BFSNav extends Globals {
                     case 3:
                         break;
                     default:
-                        if (rc.sensePassability(location43)) {
+                        if (rc.sensePassability(location43) || (!rc.hasFlag() && rc.senseMapInfo(location43).isWater())) {
                             if (distance41 + 1 < distance43) {
                                 distance43 = distance41 + 1;
                                 direction43 = direction41;
@@ -1192,7 +1192,7 @@ public class BFSNav extends Globals {
                     case 3:
                         break;
                     default:
-                        if (rc.sensePassability(location44)) {
+                        if (rc.sensePassability(location44) || (!rc.hasFlag() && rc.senseMapInfo(location44).isWater())) {
                             if (distance42 + 1 < distance44) {
                                 distance44 = distance42 + 1;
                                 direction44 = direction42;
@@ -1215,7 +1215,7 @@ public class BFSNav extends Globals {
             case 3:
                 break;
             default:
-                if (rc.sensePassability(location49)) {
+                if (rc.sensePassability(location49) || (!rc.hasFlag() && rc.senseMapInfo(location49).isWater())) {
                     if (distance25 + 1 < distance49) {
                         distance49 = distance25 + 1;
                         direction49 = direction25;
@@ -1238,7 +1238,7 @@ public class BFSNav extends Globals {
             case 4:
                 break;
             default:
-                if (rc.sensePassability(location54)) {
+                if (rc.sensePassability(location54) || (!rc.hasFlag() && rc.senseMapInfo(location54).isWater())) {
                     if (distance30 + 1 < distance54) {
                         distance54 = distance30 + 1;
                         direction54 = direction30;
@@ -1260,7 +1260,7 @@ public class BFSNav extends Globals {
             case 3:
                 break;
             default:
-                if (rc.sensePassability(location59)) {
+                if (rc.sensePassability(location59) || (!rc.hasFlag() && rc.senseMapInfo(location59).isWater())) {
                     if (distance35 + 1 < distance59) {
                         distance59 = distance35 + 1;
                         direction59 = direction35;
@@ -1283,7 +1283,7 @@ public class BFSNav extends Globals {
             case 4:
                 break;
             default:
-                if (rc.sensePassability(location64)) {
+                if (rc.sensePassability(location64) || (!rc.hasFlag() && rc.senseMapInfo(location64).isWater())) {
                     if (distance40 + 1 < distance64) {
                         distance64 = distance40 + 1;
                         direction64 = direction40;
@@ -1309,7 +1309,7 @@ public class BFSNav extends Globals {
                     case 0:
                         break;
                     default:
-                        if (rc.sensePassability(location50)) {
+                        if (rc.sensePassability(location50) || (!rc.hasFlag() && rc.senseMapInfo(location50).isWater())) {
                             if (distance26 + 1 < distance50) {
                                 distance50 = distance26 + 1;
                                 direction50 = direction26;
@@ -1341,7 +1341,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location51)) {
+                        if (rc.sensePassability(location51) || (!rc.hasFlag() && rc.senseMapInfo(location51).isWater())) {
                             if (distance27 + 1 < distance51) {
                                 distance51 = distance27 + 1;
                                 direction51 = direction27;
@@ -1373,7 +1373,7 @@ public class BFSNav extends Globals {
                     case 0:
                         break;
                     default:
-                        if (rc.sensePassability(location55)) {
+                        if (rc.sensePassability(location55) || (!rc.hasFlag() && rc.senseMapInfo(location55).isWater())) {
                             if (distance31 + 1 < distance55) {
                                 distance55 = distance31 + 1;
                                 direction55 = direction31;
@@ -1406,7 +1406,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location56)) {
+                        if (rc.sensePassability(location56) || (!rc.hasFlag() && rc.senseMapInfo(location56).isWater())) {
                             if (distance32 + 1 < distance56) {
                                 distance56 = distance32 + 1;
                                 direction56 = direction32;
@@ -1437,7 +1437,7 @@ public class BFSNav extends Globals {
                     case 3:
                         break;
                     default:
-                        if (rc.sensePassability(location60)) {
+                        if (rc.sensePassability(location60) || (!rc.hasFlag() && rc.senseMapInfo(location60).isWater())) {
                             if (distance59 + 1 < distance60) {
                                 distance60 = distance59 + 1;
                                 direction60 = direction59;
@@ -1469,7 +1469,7 @@ public class BFSNav extends Globals {
                     case 3:
                         break;
                     default:
-                        if (rc.sensePassability(location61)) {
+                        if (rc.sensePassability(location61) || (!rc.hasFlag() && rc.senseMapInfo(location61).isWater())) {
                             if (distance59 + 1 < distance61) {
                                 distance61 = distance59 + 1;
                                 direction61 = direction59;
@@ -1501,7 +1501,7 @@ public class BFSNav extends Globals {
                     case 4:
                         break;
                     default:
-                        if (rc.sensePassability(location65)) {
+                        if (rc.sensePassability(location65) || (!rc.hasFlag() && rc.senseMapInfo(location65).isWater())) {
                             if (distance64 + 1 < distance65) {
                                 distance65 = distance64 + 1;
                                 direction65 = direction64;
@@ -1534,7 +1534,7 @@ public class BFSNav extends Globals {
                     case 4:
                         break;
                     default:
-                        if (rc.sensePassability(location66)) {
+                        if (rc.sensePassability(location66) || (!rc.hasFlag() && rc.senseMapInfo(location66).isWater())) {
                             if (distance64 + 1 < distance66) {
                                 distance66 = distance64 + 1;
                                 direction66 = direction64;
@@ -1566,7 +1566,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location45)) {
+                        if (rc.sensePassability(location45) || (!rc.hasFlag() && rc.senseMapInfo(location45).isWater())) {
                             if (distance38 + 1 < distance45) {
                                 distance45 = distance38 + 1;
                                 direction45 = direction38;
@@ -1595,7 +1595,7 @@ public class BFSNav extends Globals {
                     case 3:
                         break;
                     default:
-                        if (rc.sensePassability(location46)) {
+                        if (rc.sensePassability(location46) || (!rc.hasFlag() && rc.senseMapInfo(location46).isWater())) {
                             if (distance43 + 1 < distance46) {
                                 distance46 = distance43 + 1;
                                 direction46 = direction43;
@@ -1624,7 +1624,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location47)) {
+                        if (rc.sensePassability(location47) || (!rc.hasFlag() && rc.senseMapInfo(location47).isWater())) {
                             if (distance39 + 1 < distance47) {
                                 distance47 = distance39 + 1;
                                 direction47 = direction39;
@@ -1654,7 +1654,7 @@ public class BFSNav extends Globals {
                     case 3:
                         break;
                     default:
-                        if (rc.sensePassability(location48)) {
+                        if (rc.sensePassability(location48) || (!rc.hasFlag() && rc.senseMapInfo(location48).isWater())) {
                             if (distance44 + 1 < distance48) {
                                 distance48 = distance44 + 1;
                                 direction48 = direction44;
@@ -1682,7 +1682,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location52)) {
+                        if (rc.sensePassability(location52) || (!rc.hasFlag() && rc.senseMapInfo(location52).isWater())) {
                             if (distance28 + 1 < distance52) {
                                 distance52 = distance28 + 1;
                                 direction52 = direction28;
@@ -1715,7 +1715,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location53)) {
+                        if (rc.sensePassability(location53) || (!rc.hasFlag() && rc.senseMapInfo(location53).isWater())) {
                             if (distance29 + 1 < distance53) {
                                 distance53 = distance29 + 1;
                                 direction53 = direction29;
@@ -1748,7 +1748,7 @@ public class BFSNav extends Globals {
                     case 1:
                         break;
                     default:
-                        if (rc.sensePassability(location57)) {
+                        if (rc.sensePassability(location57) || (!rc.hasFlag() && rc.senseMapInfo(location57).isWater())) {
                             if (distance33 + 1 < distance57) {
                                 distance57 = distance33 + 1;
                                 direction57 = direction33;
@@ -1782,7 +1782,7 @@ public class BFSNav extends Globals {
                     case 2:
                         break;
                     default:
-                        if (rc.sensePassability(location58)) {
+                        if (rc.sensePassability(location58) || (!rc.hasFlag() && rc.senseMapInfo(location58).isWater())) {
                             if (distance34 + 1 < distance58) {
                                 distance58 = distance34 + 1;
                                 direction58 = direction34;
@@ -1814,7 +1814,7 @@ public class BFSNav extends Globals {
                     case 3:
                         break;
                     default:
-                        if (rc.sensePassability(location62)) {
+                        if (rc.sensePassability(location62) || (!rc.hasFlag() && rc.senseMapInfo(location62).isWater())) {
                             if (distance60 + 1 < distance62) {
                                 distance62 = distance60 + 1;
                                 direction62 = direction60;
@@ -1847,7 +1847,7 @@ public class BFSNav extends Globals {
                     case 3:
                         break;
                     default:
-                        if (rc.sensePassability(location63)) {
+                        if (rc.sensePassability(location63) || (!rc.hasFlag() && rc.senseMapInfo(location63).isWater())) {
                             if (distance61 + 1 < distance63) {
                                 distance63 = distance61 + 1;
                                 direction63 = direction61;
@@ -1880,7 +1880,7 @@ public class BFSNav extends Globals {
                     case 4:
                         break;
                     default:
-                        if (rc.sensePassability(location67)) {
+                        if (rc.sensePassability(location67) || (!rc.hasFlag() && rc.senseMapInfo(location67).isWater())) {
                             if (distance65 + 1 < distance67) {
                                 distance67 = distance65 + 1;
                                 direction67 = direction65;
@@ -1914,7 +1914,7 @@ public class BFSNav extends Globals {
                     case 4:
                         break;
                     default:
-                        if (rc.sensePassability(location68)) {
+                        if (rc.sensePassability(location68) || (!rc.hasFlag() && rc.senseMapInfo(location68).isWater())) {
                             if (distance66 + 1 < distance68) {
                                 distance68 = distance66 + 1;
                                 direction68 = direction66;

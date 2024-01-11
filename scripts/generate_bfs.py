@@ -112,8 +112,8 @@ public class BFSNav extends Globals {{
 
         if distance(dx, dy) <= 2:
             content += f"""
-        if (rc.canMove({direction(dx, dy)}) && !visited.contains(location{id})) {{
-            distance{id} = 1;
+        if ((rc.canMove({direction(dx, dy)}) || rc.canFill(location{id})) && !visited.contains(location{id})) {{
+            distance{id} = rc.canFill(location{id}) && rc.isMovementReady() ? 2 : 1;
             direction{id} = {direction(dx, dy)};
         }}
             """.rstrip()
@@ -187,7 +187,7 @@ public class BFSNav extends Globals {{
             indent = " " * 24
 
         content += f"""
-{indent}if (rc.sensePassability(location{id})) {{
+{indent}if (rc.sensePassability(location{id}) || (!rc.hasFlag() && rc.senseMapInfo(location{id}).isWater())) {{
         """.rstrip()
 
         indent += " " * 4

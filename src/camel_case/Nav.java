@@ -13,8 +13,9 @@ public class Nav extends Globals {
 
     public static void moveTo(MapLocation target) throws GameActionException {
         MapLocation myLocation = rc.getLocation();
-        if (!rc.isMovementReady() || myLocation.equals(target)) {
-            rc.setIndicatorLine(myLocation, target, 255, 255, 0);
+        rc.setIndicatorLine(rc.getLocation(), target, 255, 0, 0);
+
+        if (myLocation.equals(target)) {
             return;
         }
 
@@ -36,13 +37,22 @@ public class Nav extends Globals {
         if (turnsSinceMovingCloserToTarget < 3) {
             Direction bfsDirection = BFSNav.getBestDirection(target, visited);
             if (bfsDirection != null) {
-                rc.move(bfsDirection);
+                MapLocation bfsLocation = rc.adjacentLocation(bfsDirection);
+                if (rc.canMove(bfsDirection)) {
+                    rc.move(bfsDirection);
+                } else if (rc.canFill(bfsLocation)) {
+                    rc.fill(bfsLocation);
+                }
+
                 return;
             }
         }
 
+        if (!rc.isMovementReady()) {
+            return;
+        }
+
         BugNav.moveTo(target);
-        rc.setIndicatorLine(rc.getLocation(), target, 255, 0, 0);
     }
 
     public static void reset() {
