@@ -12,7 +12,7 @@ import battlecode.common.TrapType;
 public class Unit extends Globals {
     private static MapLocation wanderTarget;
 
-    public static void performTurn() throws GameActionException {
+    public static void act() throws GameActionException {
         if (rc.canBuyGlobal(GlobalUpgrade.ACTION)) {
             rc.buyGlobal(GlobalUpgrade.ACTION);
         }

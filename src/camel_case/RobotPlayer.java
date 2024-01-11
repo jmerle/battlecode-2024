@@ -9,17 +9,17 @@ public class RobotPlayer extends Globals {
         Globals.init(robotController);
 
         while (true) {
-            performTurn();
+            act();
             Clock.yield();
         }
     }
 
-    private static void performTurn() {
+    private static void act() {
         int startRound = rc.getRoundNum();
         int startBytecodes = Clock.getBytecodeNum();
 
         try {
-            Unit.performTurn();
+            Unit.act();
         } catch (Exception e) {
             System.out.println("Exception: " + e.getMessage());
             e.printStackTrace();

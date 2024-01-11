@@ -8,7 +8,7 @@ public class Nav extends Globals {
     private static MapLocation currentTarget;
 
     private static int minDistanceToTarget;
-    private static int turnsSinceMovingCloserToTarget;
+    private static int roundsSinceMovingCloserToTarget;
     private static FastSet visited;
 
     public static void moveTo(MapLocation target) throws GameActionException {
@@ -29,12 +29,12 @@ public class Nav extends Globals {
         int distanceToTarget = myLocation.distanceSquaredTo(target);
         if (distanceToTarget < minDistanceToTarget) {
             minDistanceToTarget = distanceToTarget;
-            turnsSinceMovingCloserToTarget = 0;
+            roundsSinceMovingCloserToTarget = 0;
         } else {
-            turnsSinceMovingCloserToTarget++;
+            roundsSinceMovingCloserToTarget++;
         }
 
-        if (turnsSinceMovingCloserToTarget < 3) {
+        if (roundsSinceMovingCloserToTarget < 3) {
             Direction bfsDirection = BFSNav.getBestDirection(target, visited);
             if (bfsDirection != null) {
                 MapLocation bfsLocation = rc.adjacentLocation(bfsDirection);
@@ -59,7 +59,7 @@ public class Nav extends Globals {
         currentTarget = null;
 
         minDistanceToTarget = Integer.MAX_VALUE;
-        turnsSinceMovingCloserToTarget = 0;
+        roundsSinceMovingCloserToTarget = 0;
         visited = new FastSet();
 
         BugNav.reset();
