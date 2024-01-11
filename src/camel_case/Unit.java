@@ -4,13 +4,27 @@ import battlecode.common.Direction;
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
+import battlecode.common.GlobalUpgrade;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotInfo;
+import battlecode.common.TrapType;
 
 public class Unit extends Globals {
     private static MapLocation wanderTarget;
 
     public static void performTurn() throws GameActionException {
+        if (rc.canBuyGlobal(GlobalUpgrade.ACTION)) {
+            rc.buyGlobal(GlobalUpgrade.ACTION);
+        }
+
+        if (rc.canBuyGlobal(GlobalUpgrade.HEALING)) {
+            rc.buyGlobal(GlobalUpgrade.HEALING);
+        }
+
+        if (rc.canBuyGlobal(GlobalUpgrade.CAPTURING)) {
+            rc.buyGlobal(GlobalUpgrade.CAPTURING);
+        }
+
         if (!rc.isSpawned()) {
             if (spawn()) {
                 Nav.reset();
@@ -91,6 +105,20 @@ public class Unit extends Globals {
 
             if (rc.canAttack(visibleTarget.location)) {
                 rc.attack(visibleTarget.location);
+            }
+        }
+
+        if (!rc.isActionReady()) {
+            return;
+        }
+
+        RobotInfo nearbyTarget = getAttackTarget(GameConstants.VISION_RADIUS_SQUARED);
+        if (nearbyTarget != null) {
+            Direction direction = rc.getLocation().directionTo(nearbyTarget.location);
+            MapLocation location = rc.adjacentLocation(direction);
+
+            if (rc.canBuild(TrapType.EXPLOSIVE, location)) {
+                rc.build(TrapType.EXPLOSIVE, location);
             }
         }
     }
