@@ -33,6 +33,8 @@ public class Unit extends Globals {
             }
         }
 
+        Comms.update();
+
         if (rc.hasFlag()) {
             bringFlagHome();
             return;
@@ -46,6 +48,8 @@ public class Unit extends Globals {
         }
 
         attackOpponent();
+
+        moveToPOI();
         healFriendly();
 
         moveToFlag();
@@ -53,13 +57,35 @@ public class Unit extends Globals {
     }
 
     private static boolean spawn() throws GameActionException {
+        MapLocation[] targets = new MapLocation[Comms.getPOICount()];
+        for (int i = targets.length; --i >= 0; ) {
+            targets[i] = Comms.getPOI(i);
+        }
+
+        MapLocation bestLocation = null;
+        int minDistance = Integer.MAX_VALUE;
+
         MapLocation[] spawnLocations = rc.getAllySpawnLocations();
         for (int i = spawnLocations.length; --i >= 0; ) {
             MapLocation location = spawnLocations[i];
-            if (rc.canSpawn(location)) {
-                rc.spawn(location);
-                return true;
+            if (!rc.canSpawn(location)) {
+                continue;
             }
+
+            int distance = Integer.MAX_VALUE - 1;
+            for (int j = targets.length; --j >= 0; ) {
+                distance = Math.min(distance, location.distanceSquaredTo(targets[j]));
+            }
+
+            if (distance < minDistance) {
+                bestLocation = location;
+                minDistance = distance;
+            }
+        }
+
+        if (bestLocation != null) {
+            rc.spawn(bestLocation);
+            return true;
         }
 
         return false;
@@ -99,12 +125,12 @@ public class Unit extends Globals {
             return;
         }
 
-        RobotInfo visibleTarget = getAttackTarget(GameConstants.VISION_RADIUS_SQUARED);
-        if (visibleTarget != null) {
-            Nav.moveTo(visibleTarget.location);
+        RobotInfo moveTarget = getAttackTarget(GameConstants.VISION_RADIUS_SQUARED);
+        if (moveTarget != null) {
+            Nav.moveTo(moveTarget.location);
 
-            if (rc.canAttack(visibleTarget.location)) {
-                rc.attack(visibleTarget.location);
+            if (rc.canAttack(moveTarget.location)) {
+                rc.attack(moveTarget.location);
             }
         }
 
@@ -112,9 +138,9 @@ public class Unit extends Globals {
             return;
         }
 
-        RobotInfo nearbyTarget = getAttackTarget(GameConstants.VISION_RADIUS_SQUARED);
-        if (nearbyTarget != null) {
-            Direction direction = rc.getLocation().directionTo(nearbyTarget.location);
+        RobotInfo trapTarget = getAttackTarget(GameConstants.VISION_RADIUS_SQUARED);
+        if (trapTarget != null) {
+            Direction direction = rc.getLocation().directionTo(trapTarget.location);
             MapLocation location = rc.adjacentLocation(direction);
 
             if (rc.canBuild(TrapType.EXPLOSIVE, location)) {
@@ -240,6 +266,31 @@ public class Unit extends Globals {
         MapLocation[] locations = rc.getAllySpawnLocations();
         for (int i = locations.length; --i >= 0; ) {
             MapLocation location = locations[i];
+            int distance = myLocation.distanceSquaredTo(location);
+
+            if (distance < minDistance) {
+                bestLocation = location;
+                minDistance = distance;
+            }
+        }
+
+        if (bestLocation != null) {
+            Nav.moveTo(bestLocation);
+        }
+    }
+
+    private static void moveToPOI() throws GameActionException {
+        if (!rc.isMovementReady()) {
+            return;
+        }
+
+        MapLocation myLocation = rc.getLocation();
+
+        MapLocation bestLocation = null;
+        int minDistance = Integer.MAX_VALUE;
+
+        for (int i = Comms.getPOICount(); --i >= 0; ) {
+            MapLocation location = Comms.getPOI(i);
             int distance = myLocation.distanceSquaredTo(location);
 
             if (distance < minDistance) {
