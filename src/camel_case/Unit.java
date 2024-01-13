@@ -349,18 +349,8 @@ public class Unit extends Globals {
         }
 
         MapLocation[] locations = rc.senseBroadcastFlagLocations();
-        for (int i = locations.length; --i >= 0; ) {
-            MapLocation location = locations[i];
-            int distance = myLocation.distanceSquaredTo(location);
-
-            if (distance < minDistance) {
-                bestLocation = location;
-                minDistance = distance;
-            }
-        }
-
-        if (bestLocation != null) {
-            Nav.moveTo(bestLocation);
+        if (locations.length > 0) {
+            Nav.moveTo(locations[myId % locations.length]);
             return;
         }
 
