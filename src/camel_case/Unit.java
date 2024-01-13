@@ -48,6 +48,7 @@ public class Unit extends Globals {
         }
 
         attackOpponent();
+        buildTrap();
 
         moveToPOI();
         healFriendly();
@@ -133,20 +134,6 @@ public class Unit extends Globals {
                 rc.attack(moveTarget.location);
             }
         }
-
-        if (!rc.isActionReady()) {
-            return;
-        }
-
-        RobotInfo trapTarget = getAttackTarget(GameConstants.VISION_RADIUS_SQUARED);
-        if (trapTarget != null) {
-            Direction direction = rc.getLocation().directionTo(trapTarget.location);
-            MapLocation location = rc.adjacentLocation(direction);
-
-            if (rc.canBuild(TrapType.EXPLOSIVE, location)) {
-                rc.build(TrapType.EXPLOSIVE, location);
-            }
-        }
     }
 
     private static RobotInfo getAttackTarget(int radius) throws GameActionException {
@@ -171,6 +158,32 @@ public class Unit extends Globals {
         }
 
         return bestTarget;
+    }
+
+    private static void buildTrap() throws GameActionException {
+        if (!rc.isActionReady() || rc.getRoundNum() < GameConstants.SETUP_ROUNDS + 2) {
+            return;
+        }
+
+        MapLocation bestLocation = null;
+        int maxOpponents = 0;
+
+        for (int i = adjacentDirections.length; --i >= 0; ) {
+            MapLocation trapLocation = rc.adjacentLocation(adjacentDirections[i]);
+            if (!rc.canBuild(TrapType.EXPLOSIVE, trapLocation)) {
+                continue;
+            }
+
+            int nearbyOpponents = rc.senseNearbyRobots(trapLocation, 8, opponentTeam).length;
+            if (nearbyOpponents > maxOpponents) {
+                bestLocation = trapLocation;
+                maxOpponents = nearbyOpponents;
+            }
+        }
+
+        if (bestLocation != null) {
+            rc.build(TrapType.EXPLOSIVE, bestLocation);
+        }
     }
 
     private static void moveToSafety() throws GameActionException {
