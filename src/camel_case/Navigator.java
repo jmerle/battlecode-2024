@@ -4,7 +4,7 @@ import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 
-public class Nav extends Globals {
+public class Navigator extends Globals {
     private static MapLocation currentTarget;
 
     private static int minDistanceToTarget;
@@ -35,7 +35,7 @@ public class Nav extends Globals {
         }
 
         if (roundsSinceMovingCloserToTarget < 3) {
-            Direction bfsDirection = BFSNav.getBestDirection(target, visited);
+            Direction bfsDirection = BFSNavigator.getBestDirection(target, visited);
             if (bfsDirection != null) {
                 MapLocation bfsLocation = rc.adjacentLocation(bfsDirection);
                 if (rc.canMove(bfsDirection)) {
@@ -52,7 +52,7 @@ public class Nav extends Globals {
             return;
         }
 
-        BugNav.moveTo(target);
+        BugNavigator.moveTo(target);
     }
 
     public static void reset() {
@@ -62,6 +62,6 @@ public class Nav extends Globals {
         roundsSinceMovingCloserToTarget = 0;
         visited = new FastSet();
 
-        BugNav.reset();
+        BugNavigator.reset();
     }
 }

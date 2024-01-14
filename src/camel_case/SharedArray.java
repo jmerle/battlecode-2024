@@ -6,7 +6,7 @@ import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
 
-public class Comms extends Globals {
+public class SharedArray extends Globals {
     private static int ROUND_INDEX = 0;
     private static int POI_COUNT_INDEX = 1;
     private static int POI_OFFSET = 2;

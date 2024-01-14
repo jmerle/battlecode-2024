@@ -4,7 +4,7 @@ import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 
-public class BugNav extends Globals {
+public class BugNavigator extends Globals {
     private static MapLocation currentTarget;
 
     private static int minDistanceToTarget;

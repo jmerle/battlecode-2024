@@ -27,13 +27,13 @@ public class Unit extends Globals {
 
         if (!rc.isSpawned()) {
             if (spawn()) {
-                Nav.reset();
+                Navigator.reset();
             } else {
                 return;
             }
         }
 
-        Comms.update();
+        SharedArray.update();
 
         if (rc.hasFlag()) {
             bringFlagHome();
@@ -58,9 +58,9 @@ public class Unit extends Globals {
     }
 
     private static boolean spawn() throws GameActionException {
-        MapLocation[] targets = new MapLocation[Comms.getPOICount()];
+        MapLocation[] targets = new MapLocation[SharedArray.getPOICount()];
         for (int i = targets.length; --i >= 0; ) {
-            targets[i] = Comms.getPOI(i);
+            targets[i] = SharedArray.getPOI(i);
         }
 
         MapLocation bestLocation = null;
@@ -128,7 +128,7 @@ public class Unit extends Globals {
 
         RobotInfo moveTarget = getAttackTarget(GameConstants.VISION_RADIUS_SQUARED);
         if (moveTarget != null) {
-            Nav.moveTo(moveTarget.location);
+            Navigator.moveTo(moveTarget.location);
 
             if (rc.canAttack(moveTarget.location)) {
                 rc.attack(moveTarget.location);
@@ -242,7 +242,7 @@ public class Unit extends Globals {
 
         RobotInfo moveTarget = getHealTarget(8);
         if (moveTarget != null && !rc.getLocation().isAdjacentTo(moveTarget.location)) {
-            Nav.moveTo(moveTarget.location);
+            Navigator.moveTo(moveTarget.location);
 
             if (rc.canHeal(moveTarget.location)) {
                 rc.heal(moveTarget.location);
@@ -288,7 +288,7 @@ public class Unit extends Globals {
         }
 
         if (bestLocation != null) {
-            Nav.moveTo(bestLocation);
+            Navigator.moveTo(bestLocation);
         }
     }
 
@@ -302,8 +302,8 @@ public class Unit extends Globals {
         MapLocation bestLocation = null;
         int minDistance = Integer.MAX_VALUE;
 
-        for (int i = Comms.getPOICount(); --i >= 0; ) {
-            MapLocation location = Comms.getPOI(i);
+        for (int i = SharedArray.getPOICount(); --i >= 0; ) {
+            MapLocation location = SharedArray.getPOI(i);
             int distance = myLocation.distanceSquaredTo(location);
 
             if (distance < minDistance) {
@@ -313,7 +313,7 @@ public class Unit extends Globals {
         }
 
         if (bestLocation != null) {
-            Nav.moveTo(bestLocation);
+            Navigator.moveTo(bestLocation);
         }
     }
 
@@ -344,13 +344,13 @@ public class Unit extends Globals {
         }
 
         if (bestLocation != null) {
-            Nav.moveTo(bestLocation);
+            Navigator.moveTo(bestLocation);
             return;
         }
 
         MapLocation[] locations = rc.senseBroadcastFlagLocations();
         if (locations.length > 0) {
-            Nav.moveTo(locations[myId % locations.length]);
+            Navigator.moveTo(locations[myId % locations.length]);
             return;
         }
 
@@ -362,6 +362,6 @@ public class Unit extends Globals {
             wanderTarget = new MapLocation(RandomUtils.nextInt(mapWidth), RandomUtils.nextInt(mapHeight));
         }
 
-        Nav.moveTo(wanderTarget);
+        Navigator.moveTo(wanderTarget);
     }
 }
