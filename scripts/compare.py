@@ -48,7 +48,6 @@ class State:
     matches: list[Match]
     console: Console
     timestamp: str
-    version: str
 
     def print(self) -> None:
         maps_table = self.get_maps_table()
@@ -203,7 +202,7 @@ class State:
         return table
 
     def get_viewer_url(self, replay_name: str) -> str:
-        return f"https://releases.battlecode.org/client/battlecode24/{self.version}/index.html?gameSource=http://localhost:8000/{replay_name}"
+        return f"http://localhost:8000/client/resources/app/dist/index.html?gameSource=http://localhost:8000/{replay_name}"
 
 def run_match(state: State, map: str, reverse: bool) -> None:
     player1 = state.player1 if not reverse else state.player2
@@ -262,9 +261,7 @@ def main() -> None:
     console = Console(highlight=False)
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-    version = (Path(__file__).parent.parent / "version.txt").read_text(encoding="utf-8").strip()
-
-    state = State(args.player1, args.player2, maps, [], console, timestamp, version)
+    state = State(args.player1, args.player2, maps, [], console, timestamp)
     state.print()
 
     matches = []

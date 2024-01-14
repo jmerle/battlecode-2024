@@ -85,6 +85,7 @@ public class Unit extends Globals {
         }
 
         if (bestLocation != null) {
+            Logger.log("spawn " + bestLocation);
             rc.spawn(bestLocation);
             return true;
         }
@@ -115,6 +116,7 @@ public class Unit extends Globals {
         RobotInfo attackTarget = getAttackTarget(GameConstants.ATTACK_RADIUS_SQUARED);
         if (attackTarget != null) {
             if (rc.canAttack(attackTarget.location)) {
+                Logger.log("attack " + attackTarget.getID());
                 rc.attack(attackTarget.location);
             }
 
@@ -128,9 +130,11 @@ public class Unit extends Globals {
 
         RobotInfo moveTarget = getAttackTarget(GameConstants.VISION_RADIUS_SQUARED);
         if (moveTarget != null) {
+            Logger.log("attack move");
             Navigator.moveTo(moveTarget.location);
 
             if (rc.canAttack(moveTarget.location)) {
+                Logger.log("attack " + moveTarget.getID());
                 rc.attack(moveTarget.location);
             }
         }
@@ -221,6 +225,7 @@ public class Unit extends Globals {
         }
 
         if (bestDirection != null) {
+            Logger.log("safety " + bestDirection);
             rc.move(bestDirection);
         }
     }
@@ -232,6 +237,7 @@ public class Unit extends Globals {
 
         RobotInfo adjacentTarget = getHealTarget(GameConstants.INTERACT_RADIUS_SQUARED);
         if (adjacentTarget != null && rc.canHeal(adjacentTarget.location)) {
+            Logger.log("heal " + adjacentTarget.getID());
             rc.heal(adjacentTarget.location);
             return;
         }
@@ -242,9 +248,11 @@ public class Unit extends Globals {
 
         RobotInfo moveTarget = getHealTarget(8);
         if (moveTarget != null && !rc.getLocation().isAdjacentTo(moveTarget.location)) {
+            Logger.log("heal move");
             Navigator.moveTo(moveTarget.location);
 
             if (rc.canHeal(moveTarget.location)) {
+                Logger.log("heal " + moveTarget.getID());
                 rc.heal(moveTarget.location);
             }
         }
@@ -288,6 +296,7 @@ public class Unit extends Globals {
         }
 
         if (bestLocation != null) {
+            Logger.log("home");
             Navigator.moveTo(bestLocation);
         }
     }
@@ -313,6 +322,7 @@ public class Unit extends Globals {
         }
 
         if (bestLocation != null) {
+            Logger.log("poi");
             Navigator.moveTo(bestLocation);
         }
     }
@@ -344,12 +354,14 @@ public class Unit extends Globals {
         }
 
         if (bestLocation != null) {
+            Logger.log("flag");
             Navigator.moveTo(bestLocation);
             return;
         }
 
         MapLocation[] locations = rc.senseBroadcastFlagLocations();
         if (locations.length > 0) {
+            Logger.log("broadcast");
             Navigator.moveTo(locations[myId % locations.length]);
             return;
         }
@@ -362,6 +374,7 @@ public class Unit extends Globals {
             wanderTarget = new MapLocation(RandomUtils.nextInt(mapWidth), RandomUtils.nextInt(mapHeight));
         }
 
+        Logger.log("wander");
         Navigator.moveTo(wanderTarget);
     }
 }

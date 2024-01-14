@@ -35,23 +35,29 @@ public class Navigator extends Globals {
         }
 
         if (roundsSinceMovingCloserToTarget < 3) {
-            Direction bfsDirection = BFSNavigator.getBestDirection(target, visited);
-            if (bfsDirection != null) {
-                MapLocation bfsLocation = rc.adjacentLocation(bfsDirection);
-                if (rc.canMove(bfsDirection)) {
-                    rc.move(bfsDirection);
-                } else if (rc.canFill(bfsLocation)) {
-                    rc.fill(bfsLocation);
+            Direction bellmanFordDirection = BellmanFordNavigator.getBestDirection(target, visited);
+            if (bellmanFordDirection != null) {
+                MapLocation bellmanFordLocation = rc.adjacentLocation(bellmanFordDirection);
+                if (rc.canMove(bellmanFordDirection)) {
+                    rc.move(bellmanFordDirection);
+                } else if (rc.canFill(bellmanFordLocation)) {
+                    rc.fill(bellmanFordLocation);
                 }
 
+                Logger.log("bf " + bellmanFordDirection);
                 return;
+            } else {
+                Logger.log("bf null");
             }
+        } else {
+            Logger.log("bf n/a");
         }
 
         if (!rc.isMovementReady()) {
             return;
         }
 
+        Logger.log("bug");
         BugNavigator.moveTo(target);
     }
 

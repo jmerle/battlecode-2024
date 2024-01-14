@@ -20,6 +20,7 @@ public class RobotPlayer extends Globals {
 
         try {
             Unit.act();
+            Logger.flush();
         } catch (Exception e) {
             System.out.println("Exception: " + e.getMessage());
             e.printStackTrace();
