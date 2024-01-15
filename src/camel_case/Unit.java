@@ -11,6 +11,7 @@ import battlecode.common.TrapType;
 
 public class Unit extends Globals {
     private static MapLocation wanderTarget;
+    private static MapLocation spawnLocation;
 
     public static void act() throws GameActionException {
         if (rc.canBuyGlobal(GlobalUpgrade.ACTION)) {
@@ -27,6 +28,7 @@ public class Unit extends Globals {
 
         if (!rc.isSpawned()) {
             if (spawn()) {
+                spawnLocation = rc.getLocation();
                 Navigator.reset();
             } else {
                 return;
@@ -34,6 +36,12 @@ public class Unit extends Globals {
         }
 
         SharedArray.update();
+
+        if (rc.getRoundNum() < GameConstants.SETUP_ROUNDS * 0.75) {
+            moveToCrumbs();
+            wander();
+            return;
+        }
 
         if (rc.hasFlag()) {
             bringFlagHome();
@@ -47,8 +55,14 @@ public class Unit extends Globals {
             return;
         }
 
-        attackOpponent();
-        buildTrap();
+        if (rc.getRoundNum() >= GameConstants.SETUP_ROUNDS) {
+            attackOpponent();
+            buildTrap();
+        }
+
+        if (rc.getRoundNum() < GameConstants.SETUP_ROUNDS * 1.5) {
+            moveToCrumbs();
+        }
 
         moveToPOI();
         healFriendly();
@@ -67,6 +81,27 @@ public class Unit extends Globals {
         int minDistance = Integer.MAX_VALUE;
 
         MapLocation[] spawnLocations = rc.getAllySpawnLocations();
+
+        if (targets.length == 0) {
+            MapLocation preferredLocation = spawnLocations[myId % spawnLocations.length];
+            if (rc.canSpawn(preferredLocation)) {
+                Logger.log("spawn preferred " + preferredLocation);
+                rc.spawn(preferredLocation);
+                return true;
+            }
+
+            for (int i = spawnLocations.length - 1; --i >= 0; ) {
+                MapLocation location = spawnLocations[i];
+                if (rc.canSpawn(location)) {
+                    Logger.log("spawn first " + bestLocation);
+                    rc.spawn(location);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         for (int i = spawnLocations.length; --i >= 0; ) {
             MapLocation location = spawnLocations[i];
             if (!rc.canSpawn(location)) {
@@ -85,7 +120,7 @@ public class Unit extends Globals {
         }
 
         if (bestLocation != null) {
-            Logger.log("spawn " + bestLocation);
+            Logger.log("spawn closest " + bestLocation);
             rc.spawn(bestLocation);
             return true;
         }
@@ -165,20 +200,34 @@ public class Unit extends Globals {
     }
 
     private static void buildTrap() throws GameActionException {
-        if (!rc.isActionReady() || rc.getRoundNum() < GameConstants.SETUP_ROUNDS + 2) {
+        if (!rc.isActionReady() || myId % 2 == 0) {
             return;
         }
 
         MapLocation bestLocation = null;
         int maxOpponents = 0;
 
+        TrapType trapType = TrapType.EXPLOSIVE;
+
         for (int i = adjacentDirections.length; --i >= 0; ) {
             MapLocation trapLocation = rc.adjacentLocation(adjacentDirections[i]);
-            if (!rc.canBuild(TrapType.EXPLOSIVE, trapLocation)) {
+            if (!rc.canBuild(trapType, trapLocation)) {
                 continue;
             }
 
-            int nearbyOpponents = rc.senseNearbyRobots(trapLocation, 8, opponentTeam).length;
+            int nearbyTraps = 0;
+            for (int j = adjacentDirections.length; --j >= 0; ) {
+                MapLocation otherLocation = trapLocation.add(adjacentDirections[j]);
+                if (rc.canSenseLocation(otherLocation) && rc.senseMapInfo(otherLocation).getTrapType() != TrapType.NONE) {
+                    nearbyTraps++;
+                }
+            }
+
+            if (nearbyTraps > 2) {
+                continue;
+            }
+
+            int nearbyOpponents = rc.senseNearbyRobots(trapLocation, 13, opponentTeam).length;
             if (nearbyOpponents > maxOpponents) {
                 bestLocation = trapLocation;
                 maxOpponents = nearbyOpponents;
@@ -186,7 +235,8 @@ public class Unit extends Globals {
         }
 
         if (bestLocation != null) {
-            rc.build(TrapType.EXPLOSIVE, bestLocation);
+            Logger.log("trap " + trapType + " " + bestLocation);
+            rc.build(trapType, bestLocation);
         }
     }
 
@@ -260,14 +310,21 @@ public class Unit extends Globals {
 
     private static RobotInfo getHealTarget(int radius) throws GameActionException {
         RobotInfo bestTarget = null;
-        int minHealth = GameConstants.DEFAULT_HEALTH;
+        int minHealth = Integer.MAX_VALUE;
+        int maxPriority = Integer.MIN_VALUE;
 
         RobotInfo[] robots = rc.senseNearbyRobots(radius, myTeam);
         for (int i = robots.length; --i >= 0; ) {
             RobotInfo robot = robots[i];
-            if (robot.health < minHealth) {
+            if (robot.health == GameConstants.DEFAULT_HEALTH) {
+                continue;
+            }
+
+            int priority = robot.hasFlag() ? 1000 : 1;
+            if (bestTarget == null || priority > maxPriority || (priority == maxPriority && robot.health < minHealth)) {
                 bestTarget = robot;
                 minHealth = robot.health;
+                maxPriority = priority;
             }
         }
 
@@ -276,6 +333,11 @@ public class Unit extends Globals {
 
     private static void bringFlagHome() throws GameActionException {
         if (!rc.isMovementReady()) {
+            return;
+        }
+
+        if (rc.isMovementReady()) {
+            Navigator.moveTo(spawnLocation);
             return;
         }
 
@@ -297,6 +359,33 @@ public class Unit extends Globals {
 
         if (bestLocation != null) {
             Logger.log("home");
+            Navigator.moveTo(bestLocation);
+        }
+    }
+
+    private static void moveToCrumbs() throws GameActionException {
+        if (!rc.isMovementReady()) {
+            return;
+        }
+
+        MapLocation myLocation = rc.getLocation();
+
+        MapLocation bestLocation = null;
+        int minDistance = Integer.MAX_VALUE;
+
+        MapLocation[] locations = rc.senseNearbyCrumbs(GameConstants.VISION_RADIUS_SQUARED);
+        for (int i = locations.length; --i >= 0; ) {
+            MapLocation location = locations[i];
+
+            int distance = myLocation.distanceSquaredTo(location);
+            if (distance < minDistance) {
+                bestLocation = location;
+                minDistance = distance;
+            }
+        }
+
+        if (bestLocation != null) {
+            Logger.log("crumbs");
             Navigator.moveTo(bestLocation);
         }
     }
@@ -370,7 +459,9 @@ public class Unit extends Globals {
     }
 
     private static void wander() throws GameActionException {
-        if (wanderTarget == null || rc.canSenseLocation(wanderTarget)) {
+        while (wanderTarget == null
+            || rc.canSenseLocation(wanderTarget)
+            || (rc.getRoundNum() < GameConstants.SETUP_ROUNDS && spawnLocation.distanceSquaredTo(wanderTarget) > 200)) {
             wanderTarget = new MapLocation(RandomUtils.nextInt(mapWidth), RandomUtils.nextInt(mapHeight));
         }
 

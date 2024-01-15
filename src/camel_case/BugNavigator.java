@@ -37,8 +37,8 @@ public class BugNavigator extends Globals {
 
         if (currentObstacle == null) {
             Direction forward = myLocation.directionTo(target);
-            if (rc.canMove(forward)) {
-                rc.move(forward);
+            if (canMoveWithFill(forward)) {
+                moveWithFill(forward);
                 return;
             }
 
@@ -106,8 +106,8 @@ public class BugNavigator extends Globals {
 
         for (int i = 8; --i >= 0; ) {
             direction = obstacleOnRight ? direction.rotateLeft() : direction.rotateRight();
-            if (rc.canMove(direction)) {
-                rc.move(direction);
+            if (canMoveWithFill(direction)) {
+                moveWithFill(direction);
                 return;
             }
 
@@ -134,5 +134,18 @@ public class BugNavigator extends Globals {
 
     private static int distance1d(MapLocation a, MapLocation b) {
         return Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
+    }
+
+    private static boolean canMoveWithFill(Direction direction) {
+        return rc.canMove(direction) || rc.canFill(rc.adjacentLocation(direction));
+    }
+
+    private static void moveWithFill(Direction direction) throws GameActionException {
+        MapLocation fillLocation = rc.adjacentLocation(direction);
+        if (rc.canFill(fillLocation)) {
+            rc.fill(fillLocation);
+        } else if (rc.canMove(direction)) {
+            rc.move(direction);
+        }
     }
 }

@@ -24,6 +24,11 @@ public class Navigator extends Globals {
 
         currentTarget = target;
 
+        MapLocation nextLocation = myLocation.add(myLocation.directionTo(target));
+        if (rc.canSenseLocation(nextLocation) && rc.senseMapInfo(nextLocation).isDam()) {
+            return;
+        }
+
         int distanceToTarget = myLocation.distanceSquaredTo(target);
         if (distanceToTarget < minDistanceToTarget) {
             minDistanceToTarget = distanceToTarget;
