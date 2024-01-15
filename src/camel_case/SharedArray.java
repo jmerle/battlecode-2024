@@ -47,7 +47,7 @@ public class SharedArray extends Globals {
             }
         }
 
-        writeLocation(POI_OFFSET + POI_COUNT_INDEX, location);
+        writeLocation(POI_OFFSET + count, location);
         rc.writeSharedArray(POI_COUNT_INDEX, count + 1);
     }
 
@@ -64,8 +64,8 @@ public class SharedArray extends Globals {
     }
 
     private static MapLocation readLocation(int index) throws GameActionException {
-        int value = rc.readSharedArray(index);
-        return new MapLocation((value - 1) % 60, (value - 1) / 60);
+        int value = rc.readSharedArray(index) - 1;
+        return new MapLocation(value % 60, value / 60);
     }
 
     private static void setFlagSpawns() {

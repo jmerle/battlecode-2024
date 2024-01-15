@@ -165,7 +165,7 @@ public class Unit extends Globals {
 
         RobotInfo moveTarget = getAttackTarget(GameConstants.VISION_RADIUS_SQUARED);
         if (moveTarget != null) {
-            Logger.log("attack move");
+            Logger.log("attack move " + moveTarget.location);
             Navigator.moveTo(moveTarget.location);
 
             if (rc.canAttack(moveTarget.location)) {
@@ -298,7 +298,7 @@ public class Unit extends Globals {
 
         RobotInfo moveTarget = getHealTarget(8);
         if (moveTarget != null && !rc.getLocation().isAdjacentTo(moveTarget.location)) {
-            Logger.log("heal move");
+            Logger.log("heal move " + moveTarget.location);
             Navigator.moveTo(moveTarget.location);
 
             if (rc.canHeal(moveTarget.location)) {
@@ -358,7 +358,7 @@ public class Unit extends Globals {
         }
 
         if (bestLocation != null) {
-            Logger.log("home");
+            Logger.log("home " + bestLocation);
             Navigator.moveTo(bestLocation);
         }
     }
@@ -385,7 +385,7 @@ public class Unit extends Globals {
         }
 
         if (bestLocation != null) {
-            Logger.log("crumbs");
+            Logger.log("crumbs " + bestLocation);
             Navigator.moveTo(bestLocation);
         }
     }
@@ -411,7 +411,7 @@ public class Unit extends Globals {
         }
 
         if (bestLocation != null) {
-            Logger.log("poi");
+            Logger.log("poi " + bestLocation);
             Navigator.moveTo(bestLocation);
         }
     }
@@ -443,15 +443,16 @@ public class Unit extends Globals {
         }
 
         if (bestLocation != null) {
-            Logger.log("flag");
+            Logger.log("flag " + bestLocation);
             Navigator.moveTo(bestLocation);
             return;
         }
 
-        MapLocation[] locations = rc.senseBroadcastFlagLocations();
-        if (locations.length > 0) {
-            Logger.log("broadcast");
-            Navigator.moveTo(locations[myId % locations.length]);
+        MapLocation[] broadcasts = rc.senseBroadcastFlagLocations();
+        if (broadcasts.length > 0) {
+            MapLocation myBroadcast = broadcasts[myId % broadcasts.length];
+            Logger.log("broadcast " + myBroadcast);
+            Navigator.moveTo(myBroadcast);
             return;
         }
 
@@ -459,13 +460,16 @@ public class Unit extends Globals {
     }
 
     private static void wander() throws GameActionException {
+        int halfSize = Math.max(mapWidth, mapHeight) / 2;
+        int maxDistance = halfSize * halfSize;
+
         while (wanderTarget == null
             || rc.canSenseLocation(wanderTarget)
-            || (rc.getRoundNum() < GameConstants.SETUP_ROUNDS && spawnLocation.distanceSquaredTo(wanderTarget) > 200)) {
+            || (rc.getRoundNum() < GameConstants.SETUP_ROUNDS && spawnLocation.distanceSquaredTo(wanderTarget) > maxDistance)) {
             wanderTarget = new MapLocation(RandomUtils.nextInt(mapWidth), RandomUtils.nextInt(mapHeight));
         }
 
-        Logger.log("wander");
+        Logger.log("wander " + wanderTarget);
         Navigator.moveTo(wanderTarget);
     }
 }
