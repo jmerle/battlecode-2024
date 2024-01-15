@@ -184,9 +184,9 @@ public class Unit extends Globals {
         for (int i = robots.length; --i >= 0; ) {
             RobotInfo robot = robots[i];
 
-            int priority = robot.attackLevel * 100 + robot.healLevel * 10 + robot.buildLevel;
-            if (robot.hasFlag()) {
-                priority = 1000;
+            int priority = robot.attackLevel + robot.healLevel + robot.buildLevel;
+            if (robot.hasFlag) {
+                priority += 1000;
             }
 
             if (bestTarget == null || priority > maxPriority || (priority == maxPriority && robot.health < minHealth)) {
@@ -320,7 +320,11 @@ public class Unit extends Globals {
                 continue;
             }
 
-            int priority = robot.hasFlag() ? 1000 : 1;
+            int priority = robot.attackLevel + robot.healLevel + robot.buildLevel;
+            if (robot.hasFlag) {
+                priority += 1000;
+            }
+
             if (bestTarget == null || priority > maxPriority || (priority == maxPriority && robot.health < minHealth)) {
                 bestTarget = robot;
                 minHealth = robot.health;
