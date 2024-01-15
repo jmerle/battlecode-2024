@@ -9,7 +9,6 @@ public class Navigator extends Globals {
 
     private static int minDistanceToTarget;
     private static int roundsSinceMovingCloserToTarget;
-    private static FastSet visited;
 
     public static void moveTo(MapLocation target) throws GameActionException {
         MapLocation myLocation = rc.getLocation();
@@ -24,7 +23,6 @@ public class Navigator extends Globals {
         }
 
         currentTarget = target;
-        visited.add(myLocation);
 
         int distanceToTarget = myLocation.distanceSquaredTo(target);
         if (distanceToTarget < minDistanceToTarget) {
@@ -35,7 +33,7 @@ public class Navigator extends Globals {
         }
 
         if (roundsSinceMovingCloserToTarget < 3) {
-            Direction bellmanFordDirection = BellmanFordNavigator.getBestDirection(target, visited);
+            Direction bellmanFordDirection = BellmanFordNavigator.getBestDirection(target);
             if (bellmanFordDirection != null) {
                 MapLocation bellmanFordLocation = rc.adjacentLocation(bellmanFordDirection);
                 if (rc.canMove(bellmanFordDirection)) {
@@ -66,7 +64,6 @@ public class Navigator extends Globals {
 
         minDistanceToTarget = Integer.MAX_VALUE;
         roundsSinceMovingCloserToTarget = 0;
-        visited = new FastSet();
 
         BugNavigator.reset();
     }
