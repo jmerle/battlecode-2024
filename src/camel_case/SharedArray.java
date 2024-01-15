@@ -29,10 +29,11 @@ public class SharedArray extends Globals {
             return;
         }
 
-        FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, myTeam);
+        FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED);
         for (int i = flags.length; --i >= 0; ) {
             FlagInfo flag = flags[i];
-            if (flag.isPickedUp() || !isFlagSpawn(flag.getLocation())) {
+            if ((flag.getTeam() == myTeam && (flag.isPickedUp() || !isFlagSpawn(flag.getLocation())))
+                || (flag.getTeam() == opponentTeam && !flag.isPickedUp())) {
                 addPOI(flag.getLocation());
             }
         }
