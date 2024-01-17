@@ -256,6 +256,24 @@ def main() -> None:
         "DefaultMedium",
         "DefaultLarge",
         "DefaultHuge",
+
+        # Sprint 1
+        "AceOfSpades",
+        "Alien",
+        "Ambush",
+        "Battlecode24",
+        "BigDucksBigPond",
+        "Canals",
+        "CH3353C4K3F4CT0RY",
+        "Duck",
+        "Fountain",
+        "Hockey",
+        "MazeRunner",
+        "Rivers",
+        "Snake",
+        "Soccer",
+        "SteamboatMickey",
+        "Yinyang",
     ]
 
     console = Console(highlight=False)
