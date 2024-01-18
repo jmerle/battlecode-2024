@@ -345,31 +345,8 @@ public class Unit extends Globals {
             return;
         }
 
-        if (rc.isMovementReady()) {
-            Navigator.moveTo(spawnLocation);
-            return;
-        }
-
-        MapLocation myLocation = rc.getLocation();
-
-        MapLocation bestLocation = null;
-        int minDistance = Integer.MAX_VALUE;
-
-        MapLocation[] locations = rc.getAllySpawnLocations();
-        for (int i = locations.length; --i >= 0; ) {
-            MapLocation location = locations[i];
-            int distance = myLocation.distanceSquaredTo(location);
-
-            if (distance < minDistance) {
-                bestLocation = location;
-                minDistance = distance;
-            }
-        }
-
-        if (bestLocation != null) {
-            Logger.log("home " + bestLocation);
-            Navigator.moveTo(bestLocation);
-        }
+        Logger.log("home " + spawnLocation);
+        Navigator.moveTo(spawnLocation);
     }
 
     private static void moveToCrumbs() throws GameActionException {
