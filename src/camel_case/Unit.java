@@ -56,7 +56,12 @@ public class Unit extends Globals {
         }
 
         if (rc.getRoundNum() >= GameConstants.SETUP_ROUNDS) {
+            buildTrap();
             attackOpponent();
+            attackOpponent();
+            healFriendly();
+            buildTrap();
+            buildTrap();
             buildTrap();
         }
 
@@ -65,7 +70,6 @@ public class Unit extends Globals {
         }
 
         moveToPOI();
-        healFriendly();
 
         moveToFlag();
         pickUpFlag();
