@@ -8,7 +8,6 @@ import battlecode.common.MapLocation;
 public class BellmanFordNavigator extends Globals {
     public static Direction getBestDirection(MapLocation target) throws GameActionException {
         boolean hasFlag = rc.hasFlag();
-        MapLocation myLocation = rc.getLocation();
 
         MapLocation location1 = rc.adjacentLocation(Direction.WEST);
         int distance1 = 1_000_000;

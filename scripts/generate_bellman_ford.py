@@ -81,7 +81,6 @@ import battlecode.common.MapLocation;
 public class BellmanFordNavigator extends Globals {{
     public static Direction getBestDirection(MapLocation target) throws GameActionException {{
         boolean hasFlag = rc.hasFlag();
-        MapLocation myLocation = rc.getLocation();
     """.strip() + "\n"
 
     for dx, dy in offsets_by_distance:

@@ -287,7 +287,7 @@ def main() -> None:
         for reverse in [False, True]:
             matches.append((state, map, reverse))
 
-    with ThreadPool(4) as pool:
+    with ThreadPool(6) as pool:
         pool.starmap(run_match, matches)
 
 if __name__ == "__main__":

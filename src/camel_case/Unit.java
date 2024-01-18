@@ -14,8 +14,8 @@ public class Unit extends Globals {
     private static MapLocation spawnLocation;
 
     public static void act() throws GameActionException {
-        if (rc.canBuyGlobal(GlobalUpgrade.ACTION)) {
-            rc.buyGlobal(GlobalUpgrade.ACTION);
+        if (rc.canBuyGlobal(GlobalUpgrade.ATTACK)) {
+            rc.buyGlobal(GlobalUpgrade.ATTACK);
         }
 
         if (rc.canBuyGlobal(GlobalUpgrade.HEALING)) {
@@ -207,7 +207,7 @@ public class Unit extends Globals {
         MapLocation bestLocation = null;
         int maxOpponents = 0;
 
-        TrapType trapType = TrapType.EXPLOSIVE;
+        TrapType trapType = TrapType.STUN;
 
         for (int i = adjacentDirections.length; --i >= 0; ) {
             MapLocation trapLocation = rc.adjacentLocation(adjacentDirections[i]);

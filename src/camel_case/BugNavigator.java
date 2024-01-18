@@ -144,7 +144,9 @@ public class BugNavigator extends Globals {
         MapLocation fillLocation = rc.adjacentLocation(direction);
         if (rc.canFill(fillLocation)) {
             rc.fill(fillLocation);
-        } else if (rc.canMove(direction)) {
+        }
+
+        if (rc.canMove(direction)) {
             rc.move(direction);
         }
     }

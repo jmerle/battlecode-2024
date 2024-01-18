@@ -41,10 +41,12 @@ public class Navigator extends Globals {
             Direction bellmanFordDirection = BellmanFordNavigator.getBestDirection(target);
             if (bellmanFordDirection != null) {
                 MapLocation bellmanFordLocation = rc.adjacentLocation(bellmanFordDirection);
+                if (rc.canFill(bellmanFordLocation)) {
+                    rc.fill(bellmanFordLocation);
+                }
+
                 if (rc.canMove(bellmanFordDirection)) {
                     rc.move(bellmanFordDirection);
-                } else if (rc.canFill(bellmanFordLocation)) {
-                    rc.fill(bellmanFordLocation);
                 }
 
                 Logger.log("bf " + bellmanFordDirection);
