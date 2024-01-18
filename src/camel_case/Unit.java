@@ -63,6 +63,7 @@ public class Unit extends Globals {
             buildTrap();
             buildTrap();
             buildTrap();
+            moveToSafety();
         }
 
         if (rc.getRoundNum() < GameConstants.SETUP_ROUNDS * 1.5) {
@@ -153,13 +154,9 @@ public class Unit extends Globals {
         }
 
         RobotInfo attackTarget = getAttackTarget(GameConstants.ATTACK_RADIUS_SQUARED);
-        if (attackTarget != null) {
-            if (rc.canAttack(attackTarget.location)) {
-                Logger.log("attack " + attackTarget.getID());
-                rc.attack(attackTarget.location);
-            }
-
-            moveToSafety();
+        if (attackTarget != null && rc.canAttack(attackTarget.location)) {
+            Logger.log("attack " + attackTarget.getID());
+            rc.attack(attackTarget.location);
             return;
         }
 
@@ -255,9 +252,12 @@ public class Unit extends Globals {
 
         Direction bestDirection = null;
 
-        int maxDistance = 0;
+        int minDangerousOpponents = 0;
         for (int i = opponentRobots.length; --i >= 0; ) {
-            maxDistance += myLocation.distanceSquaredTo(opponentRobots[i].location);
+            RobotInfo robot = opponentRobots[i];
+            if (!robot.hasFlag && myLocation.distanceSquaredTo(robot.location) <= 8) {
+                minDangerousOpponents++;
+            }
         }
 
         for (int i = adjacentDirections.length; --i >= 0; ) {
@@ -268,14 +268,17 @@ public class Unit extends Globals {
 
             MapLocation newLocation = rc.adjacentLocation(direction);
 
-            int distance = 0;
+            int dangerousOpponents = 0;
             for (int j = opponentRobots.length; --j >= 0; ) {
-                distance += newLocation.distanceSquaredTo(opponentRobots[j].location);
+                RobotInfo robot = opponentRobots[j];
+                if (!robot.hasFlag && newLocation.distanceSquaredTo(robot.location) <= 8) {
+                    dangerousOpponents++;
+                }
             }
 
-            if (distance > maxDistance) {
+            if (dangerousOpponents < minDangerousOpponents) {
                 bestDirection = direction;
-                maxDistance = distance;
+                minDangerousOpponents = dangerousOpponents;
             }
         }
 
