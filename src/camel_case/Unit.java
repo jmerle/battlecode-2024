@@ -219,19 +219,20 @@ public class Unit extends Globals {
                 continue;
             }
 
-            int nearbyTraps = 0;
+            boolean hasNearbyTrap = false;
             for (int j = adjacentDirections.length; --j >= 0; ) {
                 MapLocation otherLocation = trapLocation.add(adjacentDirections[j]);
                 if (rc.canSenseLocation(otherLocation) && rc.senseMapInfo(otherLocation).getTrapType() != TrapType.NONE) {
-                    nearbyTraps++;
+                    hasNearbyTrap = true;
+                    break;
                 }
             }
 
-            if (nearbyTraps > 2) {
+            if (hasNearbyTrap) {
                 continue;
             }
 
-            int nearbyOpponents = rc.senseNearbyRobots(trapLocation, 13, opponentTeam).length;
+            int nearbyOpponents = rc.senseNearbyRobots(trapLocation, 5, opponentTeam).length;
             if (nearbyOpponents > maxOpponents) {
                 bestLocation = trapLocation;
                 maxOpponents = nearbyOpponents;
