@@ -293,10 +293,10 @@ public class Unit extends Globals {
             return;
         }
 
-        RobotInfo adjacentTarget = getHealTarget(GameConstants.INTERACT_RADIUS_SQUARED);
-        if (adjacentTarget != null && rc.canHeal(adjacentTarget.location)) {
-            Logger.log("heal " + adjacentTarget.getID());
-            rc.heal(adjacentTarget.location);
+        RobotInfo healTarget = getHealTarget(GameConstants.INTERACT_RADIUS_SQUARED);
+        if (healTarget != null && rc.canHeal(healTarget.location)) {
+            Logger.log("heal " + healTarget.getID());
+            rc.heal(healTarget.location);
             return;
         }
 
@@ -305,7 +305,7 @@ public class Unit extends Globals {
         }
 
         RobotInfo moveTarget = getHealTarget(8);
-        if (moveTarget != null && !rc.getLocation().isAdjacentTo(moveTarget.location)) {
+        if (moveTarget != null) {
             Logger.log("heal move " + moveTarget.location);
             Navigator.moveTo(moveTarget.location);
 
