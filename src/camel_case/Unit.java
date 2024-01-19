@@ -229,7 +229,7 @@ public class Unit extends Globals {
                 continue;
             }
 
-            int nearbyOpponents = rc.senseNearbyRobots(trapLocation, 5, opponentTeam).length;
+            int nearbyOpponents = rc.senseNearbyRobots(trapLocation, 8, opponentTeam).length;
             if (nearbyOpponents > maxOpponents) {
                 bestLocation = trapLocation;
                 maxOpponents = nearbyOpponents;
@@ -255,7 +255,7 @@ public class Unit extends Globals {
         int minDangerousOpponents = 0;
         for (int i = opponentRobots.length; --i >= 0; ) {
             RobotInfo robot = opponentRobots[i];
-            if (!robot.hasFlag && myLocation.distanceSquaredTo(robot.location) <= 8) {
+            if (!robot.hasFlag && myLocation.distanceSquaredTo(robot.location) <= 10) {
                 minDangerousOpponents++;
             }
         }
@@ -271,7 +271,7 @@ public class Unit extends Globals {
             int dangerousOpponents = 0;
             for (int j = opponentRobots.length; --j >= 0; ) {
                 RobotInfo robot = opponentRobots[j];
-                if (!robot.hasFlag && newLocation.distanceSquaredTo(robot.location) <= 8) {
+                if (!robot.hasFlag && newLocation.distanceSquaredTo(robot.location) <= 10) {
                     dangerousOpponents++;
                 }
             }
