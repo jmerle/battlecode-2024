@@ -201,31 +201,18 @@ public class Unit extends Globals {
     }
 
     private static void buildTrap() throws GameActionException {
-        if (!rc.isActionReady() || myId % 2 == 0) {
+        if (!rc.isActionReady()) {
             return;
         }
 
         MapLocation bestLocation = null;
-        int maxOpponents = 0;
+        int maxOpponents = 3;
 
         TrapType trapType = TrapType.STUN;
 
         for (int i = adjacentDirections.length; --i >= 0; ) {
             MapLocation trapLocation = rc.adjacentLocation(adjacentDirections[i]);
             if (!rc.canBuild(trapType, trapLocation)) {
-                continue;
-            }
-
-            boolean hasNearbyTrap = false;
-            for (int j = adjacentDirections.length; --j >= 0; ) {
-                MapLocation otherLocation = trapLocation.add(adjacentDirections[j]);
-                if (rc.canSenseLocation(otherLocation) && rc.senseMapInfo(otherLocation).getTrapType() != TrapType.NONE) {
-                    hasNearbyTrap = true;
-                    break;
-                }
-            }
-
-            if (hasNearbyTrap) {
                 continue;
             }
 
