@@ -17,6 +17,18 @@ public class BugNavigator extends Globals {
             reset();
         }
 
+        boolean hasOptions = false;
+        for (int i = adjacentDirections.length; --i >= 0; ) {
+            if (canMoveWithFill(adjacentDirections[i])) {
+                hasOptions = true;
+                break;
+            }
+        }
+
+        if (!hasOptions) {
+            return;
+        }
+
         MapLocation myLocation = rc.getLocation();
 
         int distanceToTarget = distance1d(myLocation, target);
@@ -149,5 +161,7 @@ public class BugNavigator extends Globals {
         if (rc.canMove(direction)) {
             rc.move(direction);
         }
+
+        Logger.log("bug " + direction);
     }
 }

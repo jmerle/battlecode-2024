@@ -62,7 +62,6 @@ public class Navigator extends Globals {
             return;
         }
 
-        Logger.log("bug");
         BugNavigator.moveTo(target);
     }
 
