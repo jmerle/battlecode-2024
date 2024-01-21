@@ -268,6 +268,7 @@ def main() -> None:
         "Duck",
         "Fountain",
         "Hockey",
+        "HungerGames",
         "MazeRunner",
         "Rivers",
         "Snake",
