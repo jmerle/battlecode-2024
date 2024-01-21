@@ -155,7 +155,7 @@ public class Unit extends Globals {
 
         RobotInfo attackTarget = getAttackTarget(GameConstants.ATTACK_RADIUS_SQUARED);
         if (attackTarget != null && rc.canAttack(attackTarget.location)) {
-            Logger.log("attack " + attackTarget.getID());
+            Logger.log("attack 1 " + attackTarget.getID());
             rc.attack(attackTarget.location);
             return;
         }
@@ -164,24 +164,73 @@ public class Unit extends Globals {
             return;
         }
 
+        Direction bestMoveDirection = null;
+        RobotInfo bestMoveTarget = null;
+        int maxScore = Integer.MIN_VALUE;
+
+        for (int i = adjacentDirections.length; --i >= 0; ) {
+            Direction direction = adjacentDirections[i];
+            if (!rc.canMove(direction)) {
+                continue;
+            }
+
+            MapLocation newLocation = rc.adjacentLocation(direction);
+            RobotInfo newTarget = getAttackTarget(newLocation, GameConstants.ATTACK_RADIUS_SQUARED);
+            if (newTarget == null) {
+                continue;
+            }
+
+            int score = rc.senseMapInfo(newLocation).getCrumbs();
+
+            RobotInfo[] nearbyOpponents = rc.senseNearbyRobots(newLocation, 10, opponentTeam);
+            for (int j = nearbyOpponents.length; --j >= 0; ) {
+                RobotInfo robot = nearbyOpponents[j];
+                if (!robot.hasFlag) {
+                    score--;
+                }
+            }
+
+            if (score > maxScore) {
+                bestMoveDirection = direction;
+                bestMoveTarget = newTarget;
+                maxScore = score;
+            }
+        }
+
+        if (bestMoveDirection != null) {
+            Logger.log("attack 2 move " + bestMoveDirection);
+            rc.move(bestMoveDirection);
+
+            if (rc.canAttack(bestMoveTarget.location)) {
+                Logger.log("attack 2 " + bestMoveTarget.getID());
+                rc.attack(bestMoveTarget.location);
+            }
+
+            return;
+        }
+
         RobotInfo moveTarget = getAttackTarget(GameConstants.VISION_RADIUS_SQUARED);
         if (moveTarget != null) {
-            Logger.log("attack move " + moveTarget.location);
+            Logger.log("attack 3 move " + moveTarget.location);
             Navigator.moveTo(moveTarget.location);
 
             if (rc.canAttack(moveTarget.location)) {
-                Logger.log("attack " + moveTarget.getID());
+                Logger.log("attack 3 " + moveTarget.getID());
                 rc.attack(moveTarget.location);
             }
         }
     }
 
     private static RobotInfo getAttackTarget(int radius) throws GameActionException {
+        return getAttackTarget(rc.getLocation(), radius);
+    }
+
+    private static RobotInfo getAttackTarget(MapLocation center, int radius) throws GameActionException {
         RobotInfo bestTarget = null;
         int minHealth = Integer.MAX_VALUE;
         int maxPriority = Integer.MIN_VALUE;
 
-        RobotInfo[] robots = rc.senseNearbyRobots(radius, opponentTeam);
+        RobotInfo[] robots = rc.senseNearbyRobots(center, radius, opponentTeam);
         for (int i = robots.length; --i >= 0; ) {
             RobotInfo robot = robots[i];
 
