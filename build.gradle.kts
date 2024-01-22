@@ -170,6 +170,7 @@ task<JavaExec>("run") {
         "-Dbc.server.debug=false",
         "-Dbc.engine.debug-methods=${project.property("debug") ?: "false"}",
         "-Dbc.engine.show-indicators=${project.property("showIndicators") ?: "true"}",
+        "-Dbc.engine.enable-profiler=${project.property("enableProfiler")}",
         "-Dbc.game.team-a=${project.property("teamA")}",
         "-Dbc.game.team-b=${project.property("teamB")}",
         "-Dbc.game.team-a.url=$classLocation",
