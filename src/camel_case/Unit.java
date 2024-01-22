@@ -184,8 +184,7 @@ public class Unit extends Globals {
 
             RobotInfo[] nearbyOpponents = rc.senseNearbyRobots(newLocation, 10, opponentTeam);
             for (int j = nearbyOpponents.length; --j >= 0; ) {
-                RobotInfo robot = nearbyOpponents[j];
-                if (!robot.hasFlag) {
+                if (!nearbyOpponents[j].hasFlag) {
                     score--;
                 }
             }
@@ -213,11 +212,6 @@ public class Unit extends Globals {
         if (moveTarget != null) {
             Logger.log("attack 3 move " + moveTarget.location);
             Navigator.moveTo(moveTarget.location);
-
-            if (rc.canAttack(moveTarget.location)) {
-                Logger.log("attack 3 " + moveTarget.getID());
-                rc.attack(moveTarget.location);
-            }
         }
     }
 
