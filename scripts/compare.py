@@ -275,6 +275,26 @@ def main() -> None:
         "Soccer",
         "SteamboatMickey",
         "Yinyang",
+
+        # Sprint 2
+        "Bedwars",
+        "Bunkers",
+        "Checkered",
+        "Diagonal",
+        "Divergent",
+        "EndAround",
+        "FloodGates",
+        "Foxes",
+        "Fusbol",
+        "GaltonBoard",
+        "HeMustBeFreed",
+        "Intercontinental",
+        "Klein",
+        "QueenOfHearts",
+        "QuestionableChess",
+        "Racetrack",
+        "Rainbow",
+        "TreeSearch",
     ]
 
     console = Console(highlight=False)
