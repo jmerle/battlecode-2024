@@ -1,4 +1,4 @@
-package camel_case_v17;
+package camel_case_v17_sprint2;
 
 import battlecode.common.Direction;
 import battlecode.common.RobotController;
