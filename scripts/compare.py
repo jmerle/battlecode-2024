@@ -277,7 +277,7 @@ def main() -> None:
         "Yinyang",
 
         # Sprint 2
-        "Bedwars",
+        "BedWars",
         "Bunkers",
         "Checkered",
         "Diagonal",
