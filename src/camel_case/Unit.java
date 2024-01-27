@@ -479,6 +479,10 @@ public class Unit extends Globals {
     }
 
     private static void wander() throws GameActionException {
+        if (!rc.isMovementReady()) {
+            return;
+        }
+
         int halfSize = Math.max(mapWidth, mapHeight) / 2;
         int maxDistance = halfSize * halfSize;
 
