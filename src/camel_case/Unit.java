@@ -45,14 +45,20 @@ public class Unit extends Globals {
 
         if (rc.hasFlag()) {
             bringFlagHome();
-            return;
+
+            if (rc.hasFlag()) {
+                return;
+            }
         }
 
         pickUpFlag();
 
         if (rc.hasFlag()) {
             bringFlagHome();
-            return;
+
+            if (rc.hasFlag()) {
+                return;
+            }
         }
 
         if (rc.getRoundNum() >= GameConstants.SETUP_ROUNDS) {
@@ -142,6 +148,7 @@ public class Unit extends Globals {
         for (int i = flags.length; --i >= 0; ) {
             MapLocation location = flags[i].getLocation();
             if (rc.canPickupFlag(location)) {
+                Logger.log("pickup " + location);
                 rc.pickupFlag(location);
                 return;
             }
