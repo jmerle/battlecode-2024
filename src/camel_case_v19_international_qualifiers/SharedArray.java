@@ -1,4 +1,4 @@
-package camel_case_v19;
+package camel_case_v19_international_qualifiers;
 
 import battlecode.common.Direction;
 import battlecode.common.FlagInfo;
