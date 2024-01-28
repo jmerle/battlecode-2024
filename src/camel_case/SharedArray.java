@@ -33,7 +33,8 @@ public class SharedArray extends Globals {
         for (int i = flags.length; --i >= 0; ) {
             FlagInfo flag = flags[i];
             if ((flag.getTeam() == myTeam && (flag.isPickedUp() || !isFlagSpawn(flag.getLocation())))
-                || (flag.getTeam() == opponentTeam && !flag.isPickedUp())) {
+                || (flag.getTeam() == opponentTeam && !flag.isPickedUp())
+                || (flag.getTeam() == opponentTeam && rc.senseNearbyRobots(flag.getLocation(), 8, myTeam).length < 3)) {
                 addPOI(flag.getLocation());
             }
         }

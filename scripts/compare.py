@@ -251,30 +251,30 @@ def main() -> None:
 
     # Based on ENGINE_BUILTIN_MAP_NAMES in https://github.com/battlecode/battlecode24/blob/master/client/src/constants.ts
     maps = [
-        # # Default batch 1
-        # "DefaultSmall",
-        # "DefaultMedium",
-        # "DefaultLarge",
-        # "DefaultHuge",
+        # Default batch 1
+        "DefaultSmall",
+        "DefaultMedium",
+        "DefaultLarge",
+        "DefaultHuge",
 
-        # # Sprint 1
-        # "AceOfSpades",
-        # "Alien",
-        # "Ambush",
-        # "Battlecode24",
-        # "BigDucksBigPond",
-        # "Canals",
-        # "CH3353C4K3F4CT0RY",
-        # "Duck",
-        # "Fountain",
-        # "Hockey",
-        # "HungerGames",
-        # "MazeRunner",
-        # "Rivers",
-        # "Snake",
-        # "Soccer",
-        # "SteamboatMickey",
-        # "Yinyang",
+        # Sprint 1
+        "AceOfSpades",
+        "Alien",
+        "Ambush",
+        "Battlecode24",
+        "BigDucksBigPond",
+        "Canals",
+        "CH3353C4K3F4CT0RY",
+        "Duck",
+        "Fountain",
+        "Hockey",
+        "HungerGames",
+        "MazeRunner",
+        "Rivers",
+        "Snake",
+        "Soccer",
+        "SteamboatMickey",
+        "Yinyang",
 
         # Sprint 2
         "BedWars",
