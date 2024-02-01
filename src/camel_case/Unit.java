@@ -255,10 +255,10 @@ public class Unit extends Globals {
             return;
         }
 
-        MapLocation bestLocation = null;
-        int maxOpponents = 3;
-
         TrapType trapType = TrapType.STUN;
+
+        MapLocation bestLocation = null;
+        int maxOpponents = rc.getCrumbs() > GameConstants.ROBOT_CAPACITY * trapType.buildCost ? 2 : 3;
 
         for (int i = adjacentDirections.length; --i >= 0; ) {
             MapLocation trapLocation = rc.adjacentLocation(adjacentDirections[i]);
@@ -330,35 +330,53 @@ public class Unit extends Globals {
             return;
         }
 
-        RobotInfo healTarget = getHealTarget(GameConstants.INTERACT_RADIUS_SQUARED);
-        if (healTarget != null && rc.canHeal(healTarget.location)) {
-            Logger.log("heal " + healTarget.getID());
-            rc.heal(healTarget.location);
-            return;
+        Direction bestDirection = null;
+        RobotInfo bestTarget = null;
+        int maxScore = Integer.MIN_VALUE;
+
+        for (int i = allDirections.length; --i >= 0; ) {
+            Direction direction = allDirections[i];
+            if (direction != Direction.CENTER && !rc.canMove(direction)) {
+                continue;
+            }
+
+            MapLocation newLocation = rc.adjacentLocation(direction);
+            RobotInfo newTarget = getHealTarget(newLocation, GameConstants.HEAL_RADIUS_SQUARED);
+            if (newTarget == null) {
+                continue;
+            }
+
+            int score = newTarget.attackLevel + newTarget.healLevel + newTarget.buildLevel;
+            if (newTarget.hasFlag) {
+                score += 1000;
+            }
+
+            if (score > maxScore) {
+                bestDirection = direction;
+                bestTarget = newTarget;
+                maxScore = score;
+            }
         }
 
-        if (!rc.isMovementReady()) {
-            return;
-        }
+        if (bestDirection != null) {
+            if (bestDirection != Direction.CENTER) {
+                Logger.log("heal move " + bestDirection);
+                rc.move(bestDirection);
+            }
 
-        RobotInfo moveTarget = getHealTarget(8);
-        if (moveTarget != null) {
-            Logger.log("heal move " + moveTarget.location);
-            Navigator.moveTo(moveTarget.location);
-
-            if (rc.canHeal(moveTarget.location)) {
-                Logger.log("heal " + moveTarget.getID());
-                rc.heal(moveTarget.location);
+            if (rc.canHeal(bestTarget.location)) {
+                Logger.log("heal " + bestTarget.getID());
+                rc.heal(bestTarget.location);
             }
         }
     }
 
-    private static RobotInfo getHealTarget(int radius) throws GameActionException {
+    private static RobotInfo getHealTarget(MapLocation center, int radius) throws GameActionException {
         RobotInfo bestTarget = null;
         int minHealth = Integer.MAX_VALUE;
         int maxPriority = Integer.MIN_VALUE;
 
-        RobotInfo[] robots = rc.senseNearbyRobots(radius, myTeam);
+        RobotInfo[] robots = rc.senseNearbyRobots(center, radius, myTeam);
         for (int i = robots.length; --i >= 0; ) {
             RobotInfo robot = robots[i];
             if (robot.health == GameConstants.DEFAULT_HEALTH) {

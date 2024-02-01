@@ -14,6 +14,7 @@ public class Globals {
     public static Team myTeam;
     public static Team opponentTeam;
 
+    public static Direction[] allDirections = Direction.values();
     public static Direction[] adjacentDirections = {
         Direction.NORTH,
         Direction.EAST,
