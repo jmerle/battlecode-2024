@@ -326,7 +326,7 @@ public class Unit extends Globals {
     }
 
     private static void healFriendly() throws GameActionException {
-        if (!rc.isActionReady() || getAttackTarget(GameConstants.VISION_RADIUS_SQUARED) != null) {
+        if (!rc.isActionReady() || rc.senseNearbyRobots(GameConstants.VISION_RADIUS_SQUARED, opponentTeam).length > 0) {
             return;
         }
 
