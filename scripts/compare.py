@@ -315,6 +315,29 @@ def main() -> None:
         "Tunnels",
         "Whirlpool",
         "YearOfTheDragon",
+
+        # # MIT Newbie and High School
+        # "Alligator",
+        # "Anchor",
+        # "Battlefield",
+        # "BreadPudding",
+        # "Decision",
+        # "English",
+        # "Gated",
+        # "Gauntlet",
+        # "Hurricane",
+        # "Islands",
+        # "Mountain",
+        # "Occulus",
+        # "Randy",
+        # "Skyline",
+        # "Starfish",
+        # "StarryNight",
+        # "Swoop",
+        # "TwistedTreeline",
+        # "Valentine",
+        # "Waterworld",
+        # "WheresMyWater",
     ]
 
     console = Console(highlight=False)
