@@ -1,4 +1,4 @@
-package camel_case_v21;
+package camel_case_v21_final;
 
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;

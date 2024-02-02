@@ -1,4 +1,4 @@
-package camel_case_v21;
+package camel_case_v21_final;
 
 public class Logger extends Globals {
     private static StringBuilder sb = new StringBuilder();
